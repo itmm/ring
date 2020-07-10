@@ -10,6 +10,59 @@ window.addEventListener('load', () => {
 			$li.getElementsByTagName('SPAN')[0].focus();
 		}
 	};
+	const get_next_li_sibling = $li => {
+		let $next = null;
+		if ($li && $li.tagName === 'LI') {
+			$next = $li.nextSibling;
+			while ($next && $next.tagName !== 'LI') {
+				$next = $next.nextSibling;
+			}
+		}
+		return $next;
+	};
+	const get_next = ($li, with_childs) => {
+		let $next = null;
+		if ($li && $li.tagName === 'LI') {
+			if (with_childs) {
+				$next = $li.getElementsByTagName('LI')[0];
+			}
+			if (! $next) {
+				$next = get_next_li_sibling($li);
+				let $cur = $li;
+				while (! $next && $cur.parentElement !== $tasks) {
+					$cur = $cur.parentElement.parentElement;
+					$next = get_next_li_sibling($cur);
+				}
+			}
+		}
+		return $next;
+	};
+	const get_prev_li_sibling = $li => {
+		let $prev = null;
+		if ($li && $li.tagName === 'LI') {
+			$prev = $li.previousSibling;
+			while ($prev && $prev.tagName !== 'LI') {
+				$prev = $prev.previousSibling;
+			}
+		}
+		return $prev;
+	};
+	const get_prev = ($li, with_childs) => {
+		let $prev = null;
+		if ($li && $li.tagName === 'LI') {
+			$prev = get_prev_li_sibling($li);
+			let $cur = $li;
+			while (! $prev && $cur.parentElement !== $tasks) {
+				$cur = $cur.parentElement.parentElement;
+				$prev = get_prev_li_sibling($cur);
+			}
+			if ($prev && with_childs) {
+				const $lis = $prev.getElementsByTagName('LI');
+				if ($lis.length) { $prev = $lis[$lis.length - 1]; }
+			}
+		}
+		return $prev;
+	};
 	const keydown = evt => {
 		if (evt.isComposing || evt.keyCode === 229) {
 			return;
@@ -38,37 +91,23 @@ window.addEventListener('load', () => {
 		}
 		if (evt.key === 'ArrowDown') {
 			evt.preventDefault();
-			let $container = evt.target.parentElement.parentElement;
-			let $next = evt.target.parentElement.nextSibling;
-			if (evt.shiftKey) {
-				const $li = evt.target.parentElement.getElementsByTagName('li')[0];
-				if ($li) {
-					$next = $li;
-				}
-			}
-			while (! $next && $container != $tasks) {
-				$next = $container.parentElement.nextSibling;
-				$container = $container.parentElement.parentElement;
-			}
-			do_focus($next);
+			do_focus(get_next(evt.target.parentElement, ! evt.shiftKey));
 		}
 		if (evt.key === 'ArrowUp') {
 			evt.preventDefault();
-			let $container = evt.target.parentElement.parentElement;
-			let $next = evt.target.parentElement.previousSibling;
-			while (! $next && $container != $tasks) {
-				$next = $container.parentElement.previousSibling;
-				$container = $container.parentElement.parentElement;
-			}
-			do_focus($next);
+			do_focus(get_prev(evt.target.parentElement, ! evt.shiftKey));
 		}
 		if (evt.ctrlKey && evt.key === 'd') {
 			const $target = evt.target.parentElement;
-			const $parent = $target.parentElement;
-			let $next = $target.nextSibling;
-			if (! $next) { $next = $parent.parentElement };
-			$parent.removeChild($target);
-			do_focus($next);
+			let $next = get_next($target);
+			if (! $next) { $next = get_prev($target); }
+			if ($next) {
+				$target.parentElement.removeChild($target);
+				do_focus($next);
+			} else {
+				$target.classList.add('flash');
+				setTimeout(() => { $target.classList.remove('flash'); }, 100);
+			}
 			evt.preventDefault();
 		}
 	};
