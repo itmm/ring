@@ -7,7 +7,13 @@ window.addEventListener('load', () => {
 	let last_id = 0;
 	const do_focus = $li => {
 		if ($li && $li.tagName === 'LI') {
-			$li.getElementsByTagName('SPAN')[0].focus();
+			const $edit = $li.getElementsByTagName('SPAN')[0];
+			$edit.focus();
+			const range = document.createRange();
+			range.selectNodeContents($edit);
+			const sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
 		}
 	};
 	const get_next_li_sibling = $li => {
@@ -52,11 +58,9 @@ window.addEventListener('load', () => {
 		if ($li && $li.tagName === 'LI') {
 			$prev = get_prev_li_sibling($li);
 			let $cur = $li;
-			while (! $prev && $cur.parentElement !== $tasks) {
-				$cur = $cur.parentElement.parentElement;
-				$prev = get_prev_li_sibling($cur);
-			}
-			if ($prev && with_childs) {
+			if (! $prev && $cur.parentElement !== $tasks) {
+				$prev = $cur.parentElement.parentElement;
+			} else if ($prev && with_childs) {
 				const $lis = $prev.getElementsByTagName('LI');
 				if ($lis.length) { $prev = $lis[$lis.length - 1]; }
 			}
