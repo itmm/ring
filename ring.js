@@ -71,20 +71,24 @@ window.addEventListener('load', () => {
 		if (evt.isComposing || evt.keyCode === 229) {
 			return;
 		}
+		if (evt.ctrlKey) {
+			evt.target.parentElement.classList.add('ctrl');
+		}
 		if (evt.key === 'Enter' || evt.key === 'ArrowDown' || evt.key === 'ArrowUp') {
 			evt.preventDefault();
 		}
-		if (evt.ctrlKey && evt.key === 'd') {
+		if (evt.ctrlKey && (evt.key === 'd' || evt.key === 's')) {
 			evt.preventDefault();
 		}
 	};
 	const keyup = evt => {
+		const $target = evt.target.parentElement;
+		$target.classList.remove('ctrl');
 		if (evt.isComposing || evt.keyCode === 229) {
 			return;
 		}
 		if (evt.key === 'Enter') {
 			evt.preventDefault();
-			const $target = evt.target.parentElement;
 			const value = evt.target.innerText;
 			if (value.length) {
 				do_focus(evt.shiftKey ? append_in('', $target) : append_after('', $target));
@@ -103,6 +107,11 @@ window.addEventListener('load', () => {
 		}
 		if (evt.ctrlKey && evt.key === 'd') {
 			delete_task(evt);
+		}
+		if (evt.ctrlKey && evt.key === 's') {
+			const $check = $target.getElementsByTagName('INPUT')[0];
+			$check.checked = ! $check.checked;
+			evt.preventDefault();
 		}
 	};
 	const delete_task = evt => {
@@ -131,9 +140,16 @@ window.addEventListener('load', () => {
 		const id = last_id++;
 		const $li = document.createElement('LI');
 		$li.id = '' + id;
+		const $check_div = document.createElement('DIV');
+		$check_div.classList.add('check-div');
 		const $check = document.createElement('INPUT');
 		$check.setAttribute('type', 'checkbox');
-		$li.appendChild($check);
+		const $checktt = document.createElement('DIV');
+		$checktt.innerText = 'ctrl-s';
+		$checktt.classList.add('tooltip');
+		$check_div.appendChild($check);
+		$check_div.appendChild($checktt);
+		$li.appendChild($check_div);
 		const $span = document.createElement('SPAN');
 		$span.classList.add('value');
 		$span.contentEditable = 'true';
@@ -149,6 +165,10 @@ window.addEventListener('load', () => {
 		$del.classList.add('delete');
 		$del.addEventListener('click', delete_task);
 		$li.appendChild($del);
+		const $deltt = document.createElement('DIV');
+		$deltt.innerText = 'ctrl-d';
+		$deltt.classList.add('tooltip');
+		$del.appendChild($deltt);
 		return $li;
 	};
 	const append_in = (name, $parent) => {
