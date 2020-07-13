@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
 	let last_id = 0;
 	const do_focus = $li => {
 		if ($li && $li.tagName === 'LI') {
-			const $edit = $li.getElementsByTagName('SPAN')[0];
+			const $edit = $li.getElementsByClassName('value')[0];
 			$edit.focus();
 			const range = document.createRange();
 			range.selectNodeContents($edit);
@@ -102,18 +102,21 @@ window.addEventListener('load', () => {
 			do_focus(get_prev(evt.target.parentElement, ! evt.shiftKey));
 		}
 		if (evt.ctrlKey && evt.key === 'd') {
-			const $target = evt.target.parentElement;
-			let $next = get_next($target);
-			if (! $next) { $next = get_prev($target); }
-			if ($next) {
-				$target.parentElement.removeChild($target);
-				do_focus($next);
-			} else {
-				$target.classList.add('flash');
-				setTimeout(() => { $target.classList.remove('flash'); }, 100);
-			}
-			evt.preventDefault();
+			delete_task(evt);
 		}
+	};
+	const delete_task = evt => {
+		const $target = evt.target.parentElement;
+		let $next = get_next($target);
+		if (! $next) { $next = get_prev($target); }
+		if ($next) {
+			$target.parentElement.removeChild($target);
+			do_focus($next);
+		} else {
+			$target.classList.add('flash');
+			setTimeout(() => { $target.classList.remove('flash'); }, 100);
+		}
+		evt.preventDefault();
 	};
 	const blur = evt => {
 		const $target = evt.target.parentElement;
@@ -128,13 +131,23 @@ window.addEventListener('load', () => {
 		const id = last_id++;
 		const $li = document.createElement('LI');
 		$li.id = '' + id;
+		const $check = document.createElement('INPUT');
+		$check.setAttribute('type', 'checkbox');
+		$li.appendChild($check);
 		const $span = document.createElement('SPAN');
+		$span.classList.add('value');
 		$span.contentEditable = 'true';
 		$span.innerText = name;
 		$span.addEventListener('keydown', keydown);
 		$span.addEventListener('keyup', keyup);
 		$span.addEventListener('blur', blur);
 		$li.appendChild($span);
+		const $del = document.createElement('A');
+		$del.innerText = '×';
+		$del.setAttribute('href', '#');
+		$del.classList.add('delete');
+		$del.addEventListener('click', delete_task);
+		$li.appendChild($del);
 		return $li;
 	};
 	const append_in = (name, $parent) => {
