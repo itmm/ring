@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ring JavaScript</title>
+<link rel="stylesheet" type="text/css" href="slides/slides.css"></head>
+<body>
+<h1>Ring JavaScript</h1>
+<div class="slides">
+<div class="page">
+<div class="slide slide-header"><div class="slide-nr">1</div><div class="headers">
+<h1>Ring JavaScript</h1>
+</div></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">2</div>
+<code>
+<span class="macro">@Def(<span class="name">file: ../ring.js</span>)</span><br/>
+<span class="in1"></span><span class="str">'use strict'</span>;<br/>
+<span class="in1"></span><span class="var">window</span>.<span class="fn">addEventListener</span>(<span class="str">'load'</span>,<br/>
+<span class="in2"></span>() =&gt; {<br/>
+<span class="in3"></span><span class="macro">@put(<span class="name">startup</span>)</span><br/>
+<span class="in2"></span>}<br/>
+<span class="in1"></span>);<br/>
+<span class="macro">@End(<span class="name">file: ../ring.js</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">3</div>
+<code>
+<span class="macro">@def(<span class="name">startup</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">do_focus</span> = <span class="var">$li</span> =&gt; {<br/>
+<span class="in2"></span><span class="macro">@put(<span class="name">may do focus</span>)</span><br/>
+<span class="in1"></span>};<br/>
+<span class="macro">@end(<span class="name">startup</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">4</div>
+<code>
+<span class="macro">@add(<span class="name">startup</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">needed by append in</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">append_in</span> =<br/>
+<span class="in2"></span>(<span class="var">name</span>, <span class="var">$parent</span>) =&gt; {<br/>
+<span class="in3"></span><span class="macro">@put(<span class="name">append in</span>)</span><br/>
+<span class="in2"></span>};<br/>
+<span class="macro">@end(<span class="name">startup</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">5</div>
+<code>
+<span class="macro">@add(<span class="name">startup</span>)</span><br/>
+<span class="in1"></span><span class="fn">do_focus</span>(<span class="fn">append_in</span>(<span class="str">'Project 1'</span>));<br/>
+<span class="in1"></span><span class="fn">append_in</span>(<span class="str">'Project 2'</span>);<br/>
+<span class="in1"></span><span class="fn">append_in</span>(<span class="str">'Project 3'</span>);<br/>
+<span class="macro">@end(<span class="name">startup</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">6</div>
+<code>
+<span class="macro">@def(<span class="name">may do focus</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">$li</span> &amp;&amp; <span class="var">$li</span>.<span class="var">tagName</span> === <span class="str">'LI'</span>) {<br/>
+<span class="in2"></span><span class="macro">@put(<span class="name">do focus</span>)</span><br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">may do focus</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">7</div>
+<code>
+<span class="macro">@def(<span class="name">do focus</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$edit</span> =<br/>
+<span class="in2"></span><span class="var">$li</span>.<span class="fn">getElementsByClassName</span>(<br/>
+<span class="in3"></span><span class="str">'value'</span><br/>
+<span class="in2"></span>)[<span class="num">0</span>];<br/>
+<span class="in1"></span><span class="var">$edit</span>.<span class="fn">focus</span>();<br/>
+<span class="macro">@end(<span class="name">do focus</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">8</div>
+<code>
+<span class="macro">@add(<span class="name">do focus</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">range</span> = <span class="var">document</span>.<span class="fn">createRange</span>();<br/>
+<span class="in1"></span><span class="var">range</span>.<span class="fn">selectNodeContents</span>(<span class="var">$edit</span>);<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">sel</span> = <span class="var">window</span>.<span class="fn">getSelection</span>();<br/>
+<span class="in1"></span><span class="var">sel</span>.<span class="fn">removeAllRanges</span>();<br/>
+<span class="in1"></span><span class="var">sel</span>.<span class="fn">addRange</span>(<span class="var">range</span>);<br/>
+<span class="macro">@end(<span class="name">do focus</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">9</div>
+<code>
+<span class="macro">@def(<span class="name">needed by append in</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$</span> = <span class="var">path</span> =&gt; {<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">document</span>.<span class="fn">getElementById</span>(<br/>
+<span class="in3"></span><span class="var">path</span>.<span class="fn">substr</span>(<span class="num">1</span>)<br/>
+<span class="in2"></span>);<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$tasks</span> = <span class="fn">$</span>(<span class="str">'#tasks'</span>);<br/>
+<span class="macro">@end(<span class="name">needed by append in</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">10</div>
+<code>
+<span class="macro">@def(<span class="name">append in</span>)</span><br/>
+<span class="in1"></span><span class="type">let</span> <span class="var">$container</span> = <span class="var">$parent</span> ?<br/>
+<span class="in2"></span><span class="var">$parent</span>.<span class="fn">getElementsByTagName</span>(<br/>
+<span class="in3"></span><span class="str">'LI'</span><br/>
+<span class="in2"></span>)[<span class="num">0</span>] : <span class="var">$tasks</span>;<br/>
+<span class="macro">@end(<span class="name">append in</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">11</div>
+<code>
+<span class="macro">@add(<span class="name">append in</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (! <span class="var">$container</span>) {<br/>
+<span class="in2"></span><span class="var">$container</span> =<br/>
+<span class="in3"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'UL'</span>);<br/>
+<span class="in2"></span><span class="var">$parent</span>.<span class="fn">appendChild</span>(<span class="var">$container</span>);<br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">append in</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">12</div>
+<code>
+<span class="macro">@add(<span class="name">needed by append in</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">create_li</span> = <span class="var">name</span> =&gt; {<br/>
+<span class="in2"></span><span class="macro">@put(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span>};<br/>
+<span class="macro">@end(<span class="name">needed by append in</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">13</div>
+<code>
+<span class="macro">@add(<span class="name">append in</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$li</span> = <span class="fn">create_li</span>(<span class="var">name</span>);<br/>
+<span class="in1"></span><span class="var">$container</span>.<span class="fn">appendChild</span>(<span class="var">$li</span>);<br/>
+<span class="in1"></span><span class="keyword">return</span> <span class="var">$li</span>;<br/>
+<span class="macro">@end(<span class="name">append in</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">14</div>
+<code>
+<span class="macro">@def(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">let</span> <span class="var">last_id</span> = <span class="num">0</span>;<br/>
+<span class="macro">@end(<span class="name">needed by create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">15</div>
+<code>
+<span class="macro">@def(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">id</span> = <span class="var">last_id</span>++;<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$li</span> =<br/>
+<span class="in2"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'LI'</span>);<br/>
+<span class="in1"></span><span class="var">$li</span>.<span class="var">id</span> = <span class="str">''</span> + <span class="var">id</span>;<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">16</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$check_div</span> =<br/>
+<span class="in2"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'DIV'</span>);<br/>
+<span class="in1"></span><span class="var">$check_div</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'check-div'</span>);<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$check</span> =<br/>
+<span class="in2"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'INPUT'</span>);<br/>
+<span class="in1"></span><span class="var">$check</span>.<span class="fn">setAttribute</span>(<br/>
+<span class="in2"></span><span class="str">'type'</span>, <span class="str">'checkbox'</span><br/>
+<span class="in1"></span>);<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">17</div>
+<code>
+<span class="macro">@add(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">create_tt</span> =<br/>
+<span class="in2"></span>(<span class="var">$elm</span>, <span class="var">txt</span>) =&gt; {<br/>
+<span class="in3"></span><span class="macro">@put(<span class="name">create tt</span>)</span><br/>
+<span class="in2"></span>};<br/>
+<span class="macro">@end(<span class="name">needed by create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">18</div>
+<code>
+<span class="macro">@def(<span class="name">create tt</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$tt</span> =<br/>
+<span class="in2"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'DIV'</span>);<br/>
+<span class="in1"></span><span class="var">$tt</span>.<span class="var">innerText</span> = <span class="var">txt</span>;<br/>
+<span class="in1"></span><span class="var">$tt</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'tooltip'</span>);<br/>
+<span class="in1"></span><span class="var">$elm</span>.<span class="fn">appendChild</span>(<span class="var">$tt</span>);<br/>
+<span class="macro">@end(<span class="name">create tt</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">19</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="var">$check_div</span>.<span class="fn">appendChild</span>(<span class="var">$check</span>);<br/>
+<span class="in1"></span><span class="fn">create_tt</span>(<span class="var">$check_div</span>, <span class="str">'ctrl-s'</span>);<br/>
+<span class="in1"></span><span class="var">$li</span>.<span class="fn">appendChild</span>(<span class="var">$check_div</span>);<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">20</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$span</span> =<br/>
+<span class="in2"></span><span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'SPAN'</span>);<br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'value'</span>);<br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="var">contentEditable</span> = <span class="str">'true'</span>;<br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="var">innerText</span> = <span class="var">name</span>;<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">21</div>
+<code>
+<span class="macro">@add(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">keydown</span> = <span class="var">evt</span> =&gt; {<br/>
+<span class="in2"></span><span class="macro">@put(<span class="name">keydown</span>)</span><br/>
+<span class="in1"></span>};<br/>
+<span class="macro">@end(<span class="name">needed by create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">22</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="fn">addEventListener</span>(<br/>
+<span class="in2"></span><span class="str">'keydown'</span>, <span class="var">keydown</span><br/>
+<span class="in1"></span>);<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">23</div>
+<code>
+<span class="macro">@def(<span class="name">keydown</span>)</span><br/>
+<span class="in1"></span><span class="macro">@mul(<span class="name">avoid composing</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">ctrlKey</span>) {<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$target</span> =<br/>
+<span class="in3"></span><span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>;<br/>
+<span class="in2"></span><span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'ctrl'</span>);<br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">keydown</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">24</div>
+<code>
+<span class="macro">@add(<span class="name">keydown</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">key</span> === <span class="str">'Enter'</span> ||<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="var">key</span> === <span class="str">'ArrowDown'</span> ||<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="var">key</span> === <span class="str">'ArrowUp'</span>) {<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in1"></span>}<br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">ctrlKey</span> &amp;&amp; (<br/>
+<span class="in3"></span><span class="var">evt</span>.<span class="var">key</span> === <span class="str">'d'</span> ||<br/>
+<span class="in3"></span><span class="var">evt</span>.<span class="var">key</span> === <span class="str">'s'</span><br/>
+<span class="in1"></span>)) {<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">keydown</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">25</div>
+<code>
+<span class="macro">@def(<span class="name">avoid composing</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">isComposing</span> ||<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="var">keyCode</span> === <span class="num">229</span><br/>
+<span class="in1"></span>) {<br/>
+<span class="in2"></span><span class="keyword">return</span>;<br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">avoid composing</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">26</div>
+<code>
+<span class="macro">@add(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">keyup</span> = <span class="var">evt</span> =&gt; {<br/>
+<span class="in2"></span><span class="macro">@put(<span class="name">keyup</span>)</span><br/>
+<span class="in1"></span>};<br/>
+<span class="macro">@end(<span class="name">needed by create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">27</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="fn">addEventListener</span>(<br/>
+<span class="in2"></span><span class="str">'keyup'</span>, <span class="var">keyup</span><br/>
+<span class="in1"></span>);<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">28</div>
+<code>
+<span class="macro">@def(<span class="name">keyup</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$target</span> =<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>;<br/>
+<span class="in1"></span><span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">remove</span>(<span class="str">'ctrl'</span>);<br/>
+<span class="in1"></span><span class="macro">@mul(<span class="name">avoid composing</span>)</span><br/>
+<span class="macro">@end(<span class="name">keyup</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">29</div>
+<code>
+<span class="macro">@add(<span class="name">keyup</span>)</span><br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">key</span> === <span class="str">'Enter'</span>) {<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">value</span> = <span class="var">evt</span>.<span class="var">target</span>.<span class="var">innerText</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">value</span>.<span class="var">length</span>) {<br/>
+<span class="in3"></span><span class="fn">do_focus</span>(<span class="var">evt</span>.<span class="var">shiftKey</span> ? <span class="fn">append_in</span>(<span class="str">''</span>, <span class="var">$target</span>) : <span class="fn">append_after</span>(<span class="str">''</span>, <span class="var">$target</span>));<br/>
+<span class="in2"></span>} <span class="keyword">else</span> {<br/>
+<span class="in3"></span><span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'flash'</span>);<br/>
+<span class="in3"></span><span class="fn">setTimeout</span>(() =&gt; { <span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">remove</span>(<span class="str">'flash'</span>); }, <span class="num">100</span>);<br/>
+<span class="in2"></span>}<br/>
+<span class="in1"></span>}<br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">key</span> === <span class="str">'ArrowDown'</span>) {<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in2"></span><span class="fn">do_focus</span>(<span class="fn">get_next</span>(<span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>, ! <span class="var">evt</span>.<span class="var">shiftKey</span>));<br/>
+<span class="in1"></span>}<br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">key</span> === <span class="str">'ArrowUp'</span>) {<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in2"></span><span class="fn">do_focus</span>(<span class="fn">get_prev</span>(<span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>, ! <span class="var">evt</span>.<span class="var">shiftKey</span>));<br/>
+<span class="in1"></span>}<br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">ctrlKey</span> &amp;&amp; <span class="var">evt</span>.<span class="var">key</span> === <span class="str">'d'</span>) {<br/>
+<span class="in2"></span><span class="fn">delete_task</span>(<span class="var">evt</span>);<br/>
+<span class="in1"></span>}<br/>
+<span class="in1"></span><span class="keyword">if</span> (<span class="var">evt</span>.<span class="var">ctrlKey</span> &amp;&amp; <span class="var">evt</span>.<span class="var">key</span> === <span class="str">'s'</span>) {<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$check</span> = <span class="var">$target</span>.<span class="fn">getElementsByTagName</span>(<span class="str">'INPUT'</span>)[<span class="num">0</span>];<br/>
+<span class="in2"></span><span class="var">$check</span>.<span class="var">checked</span> = ! <span class="var">$check</span>.<span class="var">checked</span>;<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in1"></span>}<br/>
+<span class="macro">@end(<span class="name">keyup</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">30</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="var">$span</span>.<span class="fn">addEventListener</span>(<span class="str">'blur'</span>, <span class="var">blur</span>);<br/>
+<span class="in1"></span><span class="var">$li</span>.<span class="fn">appendChild</span>(<span class="var">$span</span>);<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">31</div>
+<code>
+<span class="macro">@add(<span class="name">create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">$del</span> = <span class="var">document</span>.<span class="fn">createElement</span>(<span class="str">'A'</span>);<br/>
+<span class="in1"></span><span class="var">$del</span>.<span class="var">innerText</span> = <span class="str">'×'</span>;<br/>
+<span class="in1"></span><span class="var">$del</span>.<span class="fn">setAttribute</span>(<span class="str">'href'</span>, <span class="str">'#'</span>);<br/>
+<span class="in1"></span><span class="var">$del</span>.<span class="fn">setAttribute</span>(<span class="str">'draggable'</span>, <span class="str">'false'</span>);<br/>
+<span class="in1"></span><span class="var">$del</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'delete'</span>);<br/>
+<span class="in1"></span><span class="var">$del</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="var">delete_task</span>);<br/>
+<span class="in1"></span><span class="fn">create_tt</span>(<span class="var">$del</span>, <span class="str">'ctrl-d'</span>);<br/>
+<span class="in1"></span><span class="var">$li</span>.<span class="fn">appendChild</span>(<span class="var">$del</span>);<br/>
+<span class="in1"></span><span class="keyword">return</span> <span class="var">$li</span>;<br/>
+<span class="macro">@end(<span class="name">create li</span>)</span><br/>
+</code></div>
+</div>
+<div class="page"><div class="slide"><div class="slide-nr">32</div>
+<code>
+<span class="macro">@add(<span class="name">needed by create li</span>)</span><br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">get_next_li_sibling</span> = <span class="var">$li</span> =&gt; {<br/>
+<span class="in2"></span><span class="type">let</span> <span class="var">$next</span> = <span class="num">null</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">$li</span> &amp;&amp; <span class="var">$li</span>.<span class="var">tagName</span> === <span class="str">'LI'</span>) {<br/>
+<span class="in3"></span><span class="var">$next</span> = <span class="var">$li</span>.<span class="var">nextSibling</span>;<br/>
+<span class="in3"></span><span class="keyword">while</span> (<span class="var">$next</span> &amp;&amp; <span class="var">$next</span>.<span class="var">tagName</span> !== <span class="str">'LI'</span>) {<br/>
+<span class="in4"></span><span class="var">$next</span> = <span class="var">$next</span>.<span class="var">nextSibling</span>;<br/>
+<span class="in3"></span>}<br/>
+<span class="in2"></span>}<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">$next</span>;<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">get_next</span> = (<span class="var">$li</span>, <span class="var">with_childs</span>) =&gt; {<br/>
+<span class="in2"></span><span class="type">let</span> <span class="var">$next</span> = <span class="num">null</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">$li</span> &amp;&amp; <span class="var">$li</span>.<span class="var">tagName</span> === <span class="str">'LI'</span>) {<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">with_childs</span>) {<br/>
+<span class="in4"></span><span class="var">$next</span> = <span class="var">$li</span>.<span class="fn">getElementsByTagName</span>(<span class="str">'LI'</span>)[<span class="num">0</span>];<br/>
+<span class="in3"></span>}<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="var">$next</span>) {<br/>
+<span class="in4"></span><span class="var">$next</span> = <span class="fn">get_next_li_sibling</span>(<span class="var">$li</span>);<br/>
+<span class="in4"></span><span class="type">let</span> <span class="var">$cur</span> = <span class="var">$li</span>;<br/>
+<span class="in4"></span><span class="keyword">while</span> (! <span class="var">$next</span> &amp;&amp; <span class="var">$cur</span>.<span class="var">parentElement</span> !== <span class="var">$tasks</span>) {<br/>
+<span class="in5"></span><span class="var">$cur</span> = <span class="var">$cur</span>.<span class="var">parentElement</span>.<span class="var">parentElement</span>;<br/>
+<span class="in5"></span><span class="var">$next</span> = <span class="fn">get_next_li_sibling</span>(<span class="var">$cur</span>);<br/>
+<span class="in4"></span>}<br/>
+<span class="in3"></span>}<br/>
+<span class="in2"></span>}<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">$next</span>;<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">get_prev_li_sibling</span> = <span class="var">$li</span> =&gt; {<br/>
+<span class="in2"></span><span class="type">let</span> <span class="var">$prev</span> = <span class="num">null</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">$li</span> &amp;&amp; <span class="var">$li</span>.<span class="var">tagName</span> === <span class="str">'LI'</span>) {<br/>
+<span class="in3"></span><span class="var">$prev</span> = <span class="var">$li</span>.<span class="var">previousSibling</span>;<br/>
+<span class="in3"></span><span class="keyword">while</span> (<span class="var">$prev</span> &amp;&amp; <span class="var">$prev</span>.<span class="var">tagName</span> !== <span class="str">'LI'</span>) {<br/>
+<span class="in4"></span><span class="var">$prev</span> = <span class="var">$prev</span>.<span class="var">previousSibling</span>;<br/>
+<span class="in3"></span>}<br/>
+<span class="in2"></span>}<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">$prev</span>;<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">get_prev</span> = (<span class="var">$li</span>, <span class="var">with_childs</span>) =&gt; {<br/>
+<span class="in2"></span><span class="type">let</span> <span class="var">$prev</span> = <span class="num">null</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">$li</span> &amp;&amp; <span class="var">$li</span>.<span class="var">tagName</span> === <span class="str">'LI'</span>) {<br/>
+<span class="in3"></span><span class="var">$prev</span> = <span class="fn">get_prev_li_sibling</span>(<span class="var">$li</span>);<br/>
+<span class="in3"></span><span class="type">let</span> <span class="var">$cur</span> = <span class="var">$li</span>;<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="var">$prev</span> &amp;&amp; <span class="var">$cur</span>.<span class="var">parentElement</span> !== <span class="var">$tasks</span>) {<br/>
+<span class="in4"></span><span class="var">$prev</span> = <span class="var">$cur</span>.<span class="var">parentElement</span>.<span class="var">parentElement</span>;<br/>
+<span class="in3"></span>} <span class="keyword">else</span> <span class="keyword">if</span> (<span class="var">$prev</span> &amp;&amp; <span class="var">with_childs</span>) {<br/>
+<span class="in4"></span><span class="type">const</span> <span class="var">$lis</span> = <span class="var">$prev</span>.<span class="fn">getElementsByTagName</span>(<span class="str">'LI'</span>);<br/>
+<span class="in4"></span><span class="keyword">if</span> (<span class="var">$lis</span>.<span class="var">length</span>) { <span class="var">$prev</span> = <span class="var">$lis</span>[<span class="var">$lis</span>.<span class="var">length</span> - <span class="num">1</span>]; }<br/>
+<span class="in3"></span>}<br/>
+<span class="in2"></span>}<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">$prev</span>;<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">delete_task</span> = <span class="var">evt</span> =&gt; {<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$target</span> = <span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>;<br/>
+<span class="in2"></span><span class="type">let</span> <span class="var">$next</span> = <span class="fn">get_next</span>(<span class="var">$target</span>);<br/>
+<span class="in2"></span><span class="keyword">if</span> (! <span class="var">$next</span>) { <span class="var">$next</span> = <span class="fn">get_prev</span>(<span class="var">$target</span>); }<br/>
+<span class="in2"></span><span class="keyword">if</span> (<span class="var">$next</span>) {<br/>
+<span class="in3"></span><span class="var">$target</span>.<span class="var">parentElement</span>.<span class="fn">removeChild</span>(<span class="var">$target</span>);<br/>
+<span class="in3"></span><span class="fn">do_focus</span>(<span class="var">$next</span>);<br/>
+<span class="in2"></span>} <span class="keyword">else</span> {<br/>
+<span class="in3"></span><span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'flash'</span>);<br/>
+<span class="in3"></span><span class="fn">setTimeout</span>(() =&gt; { <span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">remove</span>(<span class="str">'flash'</span>); }, <span class="num">100</span>);<br/>
+<span class="in2"></span>}<br/>
+<span class="in2"></span><span class="var">evt</span>.<span class="fn">preventDefault</span>();<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">blur</span> = <span class="var">evt</span> =&gt; {<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$target</span> = <span class="var">evt</span>.<span class="var">target</span>.<span class="var">parentElement</span>;<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">value</span> = <span class="var">evt</span>.<span class="var">target</span>.<span class="var">innerText</span>;<br/>
+<span class="in2"></span><span class="keyword">if</span> (! <span class="var">value</span>.<span class="var">length</span>) {<br/>
+<span class="in3"></span><span class="var">evt</span>.<span class="var">target</span>.<span class="fn">focus</span>();<br/>
+<span class="in3"></span><span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">add</span>(<span class="str">'flash'</span>);<br/>
+<span class="in3"></span><span class="fn">setTimeout</span>(() =&gt; { <span class="var">$target</span>.<span class="var">classList</span>.<span class="fn">remove</span>(<span class="str">'flash'</span>); }, <span class="num">100</span>);<br/>
+<span class="in2"></span>}<br/>
+<span class="in1"></span>};<br/>
+<span class="in1"></span><span class="type">const</span> <span class="var">append_after</span> = (<span class="var">name</span>, <span class="var">$after</span>) =&gt; {<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$before</span> = <span class="var">$after</span>.<span class="var">nextSibling</span>;<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$container</span> = <span class="var">$after</span>.<span class="var">parentElement</span>;<br/>
+<span class="in2"></span><span class="type">const</span> <span class="var">$li</span> = <span class="fn">create_li</span>(<span class="var">name</span>);<br/>
+<span class="in2"></span><span class="var">$container</span>.<span class="fn">insertBefore</span>(<span class="var">$li</span>, <span class="var">$before</span>);<br/>
+<span class="in2"></span><span class="keyword">return</span> <span class="var">$li</span>;<br/>
+<span class="in1"></span>};<br/>
+<span class="macro">@end(<span class="name">needed by create li</span>)</span><br/>
+</code></div>
+</div>
+</body>
+</html>

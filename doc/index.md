@@ -1,65 +1,211 @@
+# Ring JavaScript
 
+```
+@Def(file: ../ring.js)
 	'use strict';
 	window.addEventListener('load',
 		() => {
-			
+			@put(startup)
+		}
+	);
+@End(file: ../ring.js)
+```
+
+```
+@def(startup)
 	const do_focus = $li => {
-		
+		@put(may do focus)
+	};
+@end(startup)
+```
+
+```
+@add(startup)
+	@put(needed by append in)
+	const append_in =
+		(name, $parent) => {
+			@put(append in)
+		};
+@end(startup)
+```
+
+```
+@add(startup)
+	do_focus(append_in('Project 1'));
+	append_in('Project 2');
+	append_in('Project 3');
+@end(startup)
+```
+
+```
+@def(may do focus)
 	if ($li && $li.tagName === 'LI') {
-		
+		@put(do focus)
+	}
+@end(may do focus)
+```
+
+```
+@def(do focus)
 	const $edit =
 		$li.getElementsByClassName(
 			'value'
 		)[0];
 	$edit.focus();
+@end(do focus)
+```
 
+```
+@add(do focus)
 	const range = document.createRange();
 	range.selectNodeContents($edit);
 	const sel = window.getSelection();
 	sel.removeAllRanges();
 	sel.addRange(range);
+@end(do focus)
+```
 
-	}
-
-	};
-
-	
+```
+@def(needed by append in)
 	const $ = path => {
 		return document.getElementById(
 			path.substr(1)
 		);
 	};
 	const $tasks = $('#tasks');
+@end(needed by append in)
+```
 
-	
+```
+@def(append in)
+	let $container = $parent ?
+		$parent.getElementsByTagName(
+			'LI'
+		)[0] : $tasks;
+@end(append in)
+```
+
+```
+@add(append in)
+	if (! $container) {
+		$container =
+			document.createElement('UL');
+		$parent.appendChild($container);
+	}
+@end(append in)
+```
+
+```
+@add(needed by append in)
+	@put(needed by create li)
+	const create_li = name => {
+		@put(create li)
+	};
+@end(needed by append in)
+```
+
+```
+@add(append in)
+	const $li = create_li(name);
+	$container.appendChild($li);
+	return $li;
+@end(append in)
+```
+
+```
+@def(needed by create li)
 	let last_id = 0;
+@end(needed by create li)
+```
 
+```
+@def(create li)
+	const id = last_id++;
+	const $li =
+		document.createElement('LI');
+	$li.id = '' + id;
+@end(create li)
+```
+
+```
+@add(create li)
+	const $check_div =
+		document.createElement('DIV');
+	$check_div.classList.add('check-div');
+	const $check =
+		document.createElement('INPUT');
+	$check.setAttribute(
+		'type', 'checkbox'
+	);
+@end(create li)
+```
+
+```
+@add(needed by create li)
 	const create_tt =
 		($elm, txt) => {
-			
+			@put(create tt)
+		};
+@end(needed by create li)
+```
+
+```
+@def(create tt)
 	const $tt =
 		document.createElement('DIV');
 	$tt.innerText = txt;
 	$tt.classList.add('tooltip');
 	$elm.appendChild($tt);
+@end(create tt)
+```
 
-		};
+```
+@add(create li)
+	$check_div.appendChild($check);
+	create_tt($check_div, 'ctrl-s');
+	$li.appendChild($check_div);
+@end(create li)
+```
 
+```
+@add(create li)
+	const $span =
+		document.createElement('SPAN');
+	$span.classList.add('value');
+	$span.contentEditable = 'true';
+	$span.innerText = name;
+@end(create li)
+```
+
+```
+@add(needed by create li)
 	const keydown = evt => {
-		
-	
-	if (evt.isComposing ||
-		evt.keyCode === 229
-	) {
-		return;
-	}
+		@put(keydown)
+	};
+@end(needed by create li)
+```
 
+```
+@add(create li)
+	$span.addEventListener(
+		'keydown', keydown
+	);
+@end(create li)
+```
+
+```
+@def(keydown)
+	@mul(avoid composing)
 	if (evt.ctrlKey) {
 		const $target =
 			evt.target.parentElement;
 		$target.classList.add('ctrl');
 	}
+@end(keydown)
+```
 
+```
+@add(keydown)
 	if (evt.key === 'Enter' ||
 		evt.key === 'ArrowDown' ||
 		evt.key === 'ArrowUp') {
@@ -71,22 +217,46 @@
 	)) {
 		evt.preventDefault();
 	}
+@end(keydown)
+```
 
-	};
-
-	const keyup = evt => {
-		
-	const $target =
-		evt.target.parentElement;
-	$target.classList.remove('ctrl');
-	
+```
+@def(avoid composing)
 	if (evt.isComposing ||
 		evt.keyCode === 229
 	) {
 		return;
 	}
+@end(avoid composing)
+```
 
+```
+@add(needed by create li)
+	const keyup = evt => {
+		@put(keyup)
+	};
+@end(needed by create li)
+```
 
+```
+@add(create li)
+	$span.addEventListener(
+		'keyup', keyup
+	);
+@end(create li)
+```
+
+```
+@def(keyup)
+	const $target =
+		evt.target.parentElement;
+	$target.classList.remove('ctrl');
+	@mul(avoid composing)
+@end(keyup)
+```
+
+```
+@add(keyup)
 	if (evt.key === 'Enter') {
 		evt.preventDefault();
 		const value = evt.target.innerText;
@@ -113,9 +283,32 @@
 		$check.checked = ! $check.checked;
 		evt.preventDefault();
 	}
+@end(keyup)
+```
 
-	};
+```
+@add(create li)
+	$span.addEventListener('blur', blur);
+	$li.appendChild($span);
+@end(create li)
+```
 
+```
+@add(create li)
+	const $del = document.createElement('A');
+	$del.innerText = '×';
+	$del.setAttribute('href', '#');
+	$del.setAttribute('draggable', 'false');
+	$del.classList.add('delete');
+	$del.addEventListener('click', delete_task);
+	create_tt($del, 'ctrl-d');
+	$li.appendChild($del);
+	return $li;
+@end(create li)
+```
+
+```
+@add(needed by create li)
 	const get_next_li_sibling = $li => {
 		let $next = null;
 		if ($li && $li.tagName === 'LI') {
@@ -196,79 +389,6 @@
 		$container.insertBefore($li, $before);
 		return $li;
 	};
+@end(needed by create li)
+```
 
-	const create_li = name => {
-		
-	const id = last_id++;
-	const $li =
-		document.createElement('LI');
-	$li.id = '' + id;
-
-	const $check_div =
-		document.createElement('DIV');
-	$check_div.classList.add('check-div');
-	const $check =
-		document.createElement('INPUT');
-	$check.setAttribute(
-		'type', 'checkbox'
-	);
-
-	$check_div.appendChild($check);
-	create_tt($check_div, 'ctrl-s');
-	$li.appendChild($check_div);
-
-	const $span =
-		document.createElement('SPAN');
-	$span.classList.add('value');
-	$span.contentEditable = 'true';
-	$span.innerText = name;
-
-	$span.addEventListener(
-		'keydown', keydown
-	);
-
-	$span.addEventListener(
-		'keyup', keyup
-	);
-
-	$span.addEventListener('blur', blur);
-	$li.appendChild($span);
-
-	const $del = document.createElement('A');
-	$del.innerText = '×';
-	$del.setAttribute('href', '#');
-	$del.setAttribute('draggable', 'false');
-	$del.classList.add('delete');
-	$del.addEventListener('click', delete_task);
-	create_tt($del, 'ctrl-d');
-	$li.appendChild($del);
-	return $li;
-
-	};
-
-	const append_in =
-		(name, $parent) => {
-			
-	let $container = $parent ?
-		$parent.getElementsByTagName(
-			'LI'
-		)[0] : $tasks;
-
-	if (! $container) {
-		$container =
-			document.createElement('UL');
-		$parent.appendChild($container);
-	}
-
-	const $li = create_li(name);
-	$container.appendChild($li);
-	return $li;
-
-		};
-
-	do_focus(append_in('Project 1'));
-	append_in('Project 2');
-	append_in('Project 3');
-
-		}
-	);
