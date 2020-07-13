@@ -27,6 +27,17 @@ a, a:visited {
 	color: #cc7832;
 	text-decoration: none;
 }
+.delete {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+	color: transparent;
+	background-image: url(trashcan-16-orange.svg);
+}
+.delete:active {
+	background-image: url(trashcan-16-white.svg);
+}
 .flash {
 	background-color: #f92672;
 }

@@ -145,6 +145,7 @@ window.addEventListener('load', () => {
 		const $del = document.createElement('A');
 		$del.innerText = '×';
 		$del.setAttribute('href', '#');
+		$del.setAttribute('draggable', 'false');
 		$del.classList.add('delete');
 		$del.addEventListener('click', delete_task);
 		$li.appendChild($del);
