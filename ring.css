@@ -2,6 +2,8 @@ body {
 	font-family: "Noto Serif", serif;
 	margin: 0;
 	padding: 16px;
+	background-color: #2a2a2b;
+	color: #a9b7c6;
 }
 h1 {
 	display: none;
@@ -17,12 +19,14 @@ ul ul {
 li {
 	margin: 0;
 }
-a {
+span.value {
+	outline-color: #214283;
+	margin: 0 6px;
+}
+a, a:visited {
+	color: #cc7832;
 	text-decoration: none;
 }
-.delete {
-	margin-left: 12px;
-}
 .flash {
-	background-color: red;
+	background-color: #f92672;
 }
